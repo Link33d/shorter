@@ -51,15 +51,13 @@ func generateCode() (string, error) {
 
 func CreateShortUrl(ctx *gin.Context) {
 
-	// Validate the format of the request body
+	// Validate the format of the request body and if the provided URL is a valid URL format
 	request := CreateShortUrlRequest{}
 	ctx.BindJSON(&request)
 	if err := request.Validate(); err != nil {
 		sendMessage(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	// Validate if the provided URL is a valid URL format
 
 	// Generate the code
 	code, err := generateCode()
