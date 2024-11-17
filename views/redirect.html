@@ -12,23 +12,26 @@
         <h1>SHORTER</h1>
         <span class="message">Redirecting in <span id="seconds">5</span> seconds...</span>
     </div>
-</body>
-</html>
 
+    <script>
+        const secondsElement = document.getElementById('seconds');
+        let seconds = 5;
 
-  <script>
-    const secondsElement = document.getElementById('seconds');
-    let seconds = 5;
+        // Create an interval that executes every 1000ms (1 second)
+        const interval = setInterval(() => {
+            // Decrease the countdown value
+            seconds--;
 
-    const interval = setInterval(() => {
-      seconds--;
-      secondsElement.textContent = seconds;
+            secondsElement.textContent = seconds;
 
-      if (seconds === 0) {
-        clearInterval(interval);
-        window.location.href = "{{ .url }}"; // Altere para o link desejado
-      }
-    }, 1000);
-  </script>
+            if (seconds === 0) {
+                // Stops the interval to prevent further execution
+                clearInterval(interval); 
+
+                // Redirects the user to the provided URL
+                window.location.href = "{{ .url }}";
+            }
+        }, 1000);
+    </script>
 </body>
 </html>

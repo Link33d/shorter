@@ -9,6 +9,7 @@ import (
 
 func GetShortUrlByCode(code string) (*model.Link, error) {
 
+	// Prepare an SQL query
 	query, err := config.GetDB().Prepare("SELECT * FROM link WHERE code=$1")
 	if err != nil {
 		return nil, err

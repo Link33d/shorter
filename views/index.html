@@ -21,10 +21,12 @@
         var submitButton = document.getElementById("submitButton")
         var outputText = document.getElementById("outputText")
 
+        // Updates the submit button to display a loader or text
         function changeLoading(load) {
             submitButton.innerHTML = ( load ? "<div class=\"loader\"></div>" : "Shorten!" )
         }
 
+        // Displays a message to the user in the output area.
         function printMessage(type, message) {
             
             outputText.style.display = "block";
@@ -35,13 +37,18 @@
 
         }
 
+        // Add a click event listener to the submit button
         submitButton.addEventListener("click", e => {
             
-            if (urlInput.value == "") {
-                return printMessage("err", "The field URL cannot be empty")
+            // Prevent submission if the input is empty
+            if (!urlInput.value.trim()) {
+                return printMessage("err", "The field URL cannot be empty");
             }
             
+            // Show the loading indicator
             changeLoading(true)
+
+            // Send a POST request to shorten the URL
             fetch(`/`, {
                 method: "POST",
                 headers: {
@@ -52,8 +59,11 @@
                 })
             })
             .then(response => {
+
+                // Hide the loading indicator
                 changeLoading(false)
                 
+                // Checking status code
                 if (response.status == 400) {
                     
                     printMessage("err",  "You must enter a valid url")
@@ -66,19 +76,22 @@
 
                     return null;
                 }
+
                 return response.json()
             })
             .then(data => {
                 
+                // If no data, exit early
                 if (!data) return
-
                 
                 let link = `${location.protocol}//${location.hostname}:${location.port}/${data.data.code}`
 
-                printMessage("ok", `Your URL has been successfully shortened: <br><a href="${link}">${link}</a`)
+                // Display the shortened URL to the user
+                printMessage("ok", `Your URL has been successfully shortened: <br><a href="${link}" target="_blank">${link}</a`)
 
             })
             .catch(error => {
+                // Handle network or other unknown errors
                 changeLoading(false)
                 console.log(error)
                 return printMessage("err", "An unknown error has occurred")

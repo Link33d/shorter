@@ -9,11 +9,13 @@ func InsertShortUrl(link model.Link) (*model.Link, error) {
 
 	var id int
 
+	// Prepare an SQL query
 	query, err := config.GetDB().Prepare("INSERT INTO link (url, code) VALUES ($1, $2) RETURNING id")
 	if err != nil {
 		return nil, err
 	}
 
+	// Executes the prepared query
 	err = query.QueryRow(link.Url, link.Code).Scan(&id)
 	if err != nil {
 		return nil, err
