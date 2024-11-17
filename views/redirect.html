@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Shorter | redirecting... </title>
+</head>
+<body>
+    <div class="mainDiv" onclick="window.location.href='/'">
+        <h1>SHORTER</h1>
+        <span class="message">Redirecting in <span id="seconds">5</span> seconds...</span>
+    </div>
+</body>
+</html>
+
+
+  <script>
+    const secondsElement = document.getElementById('seconds');
+    let seconds = 5;
+
+    const interval = setInterval(() => {
+      seconds--;
+      secondsElement.textContent = seconds;
+
+      if (seconds === 0) {
+        clearInterval(interval);
+        window.location.href = "{{ .url }}"; // Altere para o link desejado
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

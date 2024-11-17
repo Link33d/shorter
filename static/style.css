@@ -5,6 +5,7 @@
 
 body {
     font-family: monospace;
+    overflow: hidden;
 }
 
 .mainDiv {
@@ -95,4 +96,10 @@ a {
     100% {
         transform: rotate(1turn);
     }
+}
+
+span.statusCode {
+    font-size: 20vw;
+    font-weight: bolder;
+    margin-top: -50px;
 }

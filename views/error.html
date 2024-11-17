@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Shorter | Error: {{ .code }} </title>
+</head>
+<body>
+    <div class="mainDiv" onclick="window.location.href='/'">
+        <h1>SHORTER</h1>
+        <span class="statusCode">{{ .code }}</span>
+        <span>something went wrong!</span>
+        <button href="/">back</button>
+    </div>
+</body>
+</html>

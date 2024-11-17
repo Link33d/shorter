@@ -28,3 +28,9 @@ func sendData(ctx *gin.Context, code int, msg string, data interface{}) {
 		"data":    data,
 	})
 }
+
+func sendHtmlError(ctx *gin.Context, code int) {
+	ctx.HTML(http.StatusBadRequest, "error.html", gin.H{
+		"code": code,
+	})
+}
