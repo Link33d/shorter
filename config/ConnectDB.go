@@ -7,6 +7,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var dbConnection *sql.DB
+
 const (
 	host     = "192.168.0.100"
 	port     = "5432"
@@ -34,6 +36,14 @@ func ConnectDB() (*sql.DB, error) {
 
 	fmt.Println("DB: Connect to " + dbname + " as " + user)
 
+	dbConnection = db
+
 	// Return Db
 	return db, nil
+}
+
+func GetDB() *sql.DB {
+
+	return dbConnection
+
 }
