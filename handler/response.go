@@ -1,6 +1,10 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 func sendMessage(ctx *gin.Context, code int, msg string) {
 
@@ -9,6 +13,10 @@ func sendMessage(ctx *gin.Context, code int, msg string) {
 	ctx.JSON(code, gin.H{
 		"message": msg,
 	})
+}
+
+func sendInternalServerError(ctx *gin.Context) {
+	sendMessage(ctx, http.StatusInternalServerError, "Something went wrong when communicating with the database")
 }
 
 func sendData(ctx *gin.Context, code int, msg string, data interface{}) {
