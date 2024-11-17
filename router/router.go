@@ -1,15 +1,37 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"net/http"
 
-func Initialize() {
-	server := gin.Default()
+	"github.com/gin-gonic/gin"
+)
 
-	server.GET("/ping", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
+func Initialize(server *gin.Engine) {
+
+	// Index page router
+	server.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 
-	server.Run(":8080")
+	// Create link router
+	server.POST("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
+
+	// Redirect router
+	server.GET("/:code", func(ctx *gin.Context) {
+
+		code := ctx.Param("code")
+
+		fmt.Println(code)
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": code,
+		})
+	})
 }
