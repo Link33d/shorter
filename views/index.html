@@ -72,7 +72,8 @@
                 
                 if (!data) return
 
-                let link = location.protocol+"//"+location.hostname+"/"+data.data.code
+                
+                let link = `${location.protocol}//${location.hostname}:${location.port}/${data.data.code}`
 
                 printMessage("ok", `Your URL has been successfully shortened: <br><a href="${link}">${link}</a`)
 
