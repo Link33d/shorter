@@ -7,7 +7,5 @@ import (
 )
 
 func IndexPage(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "pong",
-	})
+	ctx.HTML(http.StatusOK, "index.tmpl", gin.H{})
 }

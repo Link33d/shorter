@@ -11,6 +11,9 @@ func main() {
 	// Initialize the server
 	server := gin.Default()
 
+	// Loads HTML templates from the "views" directory to render responses.
+	server.LoadHTMLGlob("views/*")
+
 	// Initialize the database
 	_, err := config.ConnectDB()
 	if err != nil {
