@@ -7,5 +7,5 @@ import (
 )
 
 func IndexPage(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "index.tmpl", gin.H{})
+	ctx.HTML(http.StatusOK, "index.html", gin.H{})
 }

@@ -11,6 +11,8 @@ func main() {
 	// Initialize the server
 	server := gin.Default()
 
+	server.Static("/static", "./static")
+
 	// Loads HTML templates from the "views" directory to render responses.
 	server.LoadHTMLGlob("views/*")
 

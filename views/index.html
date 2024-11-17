@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Shorter</title>
+</head>
+<body>
+    <div class="mainDiv">
+        <h1>SHORTER</h1>
+        <span for="urlInput">Which URL do you want to shorten?</span>
+        <input id="urlInput" name="urlInput" type="text" placeholder="https://google.com">
+        <button id="submitButton" type="button">Shorten!</button>
+        <span id="outputText" style="display: none;">Text</span>
+    </div>
+
+    <script>
+        var urlInput = document.getElementById("urlInput")
+        var submitButton = document.getElementById("submitButton")
+        var outputText = document.getElementById("outputText")
+
+        function changeLoading(load) {
+            submitButton.innerHTML = ( load ? "<div class=\"loader\"></div>" : "Shorten!" )
+        }
+
+        function printMessage(type, message) {
+            
+            outputText.style.display = "block";
+
+            outputText.style.color = ( type == "err" ? "#B71C1C" : "#376e37")
+
+            outputText.innerHTML = message
+
+        }
+
+        submitButton.addEventListener("click", e => {
+            
+            if (urlInput.value == "") {
+                return printMessage("err", "The field URL cannot be empty")
+            }
+            
+            changeLoading(true)
+            fetch(`/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "url": urlInput.value
+                })
+            })
+            .then(response => {
+                changeLoading(false)
+                
+                if (response.status == 400) {
+                    
+                    printMessage("err",  "You must enter a valid url")
+
+                    return null;
+                } 
+
+                if (response.status == 500) {
+                    printMessage("err",  "An internal error occurred on our server")
+
+                    return null;
+                }
+                return response.json()
+            })
+            .then(data => {
+                
+                if (!data) return
+
+                let link = location.protocol+"//"+location.hostname+"/"+data.data.code
+
+                printMessage("ok", `Your URL has been successfully shortened: <br><a href="${link}">${link}</a`)
+
+            })
+            .catch(error => {
+                changeLoading(false)
+                console.log(error)
+                return printMessage("err", "An unknown error has occurred")
+            });
+
+        })
+    </script>
+</body>
+</html>
