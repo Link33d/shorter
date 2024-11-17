@@ -1,16 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import "github.com/link33d/shorter/router"
 
 func main() {
 
-	server := gin.Default()
+	// Initialize Router
 
-	server.GET("/ping", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	server.Run(":8080")
+	router.Initialize()
 }
