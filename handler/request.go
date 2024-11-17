@@ -47,8 +47,8 @@ func formatURL(input *string) error {
 	}
 
 	// Normalize and format the path and query
-	parsedURL.Path = url.PathEscape(parsedURL.Path)
-	parsedURL.RawQuery = parsedURL.Query().Encode()
+	//parsedURL.Path = url.PathEscape(parsedURL.Path)
+	//parsedURL.RawQuery = parsedURL.Query().Encode()
 
 	// Change url value
 	*input = parsedURL.String()
