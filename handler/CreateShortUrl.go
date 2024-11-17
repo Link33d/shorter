@@ -2,12 +2,52 @@ package handler
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/link33d/shorter/model"
 	"github.com/link33d/shorter/service"
 )
+
+const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+func generateCode() (string, error) {
+
+	attempts := 0
+	randGen := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	// Generate a unique code for the URL
+
+	for {
+
+		codeArray := make([]byte, 10)
+
+		for i := 0; i < 10; i++ {
+			codeArray[i] = charset[randGen.Intn(len(charset))]
+		}
+
+		code := string(codeArray)
+
+		// Check if the generated code already exists in the database to avoid duplicates
+		link, err := service.GetShortUrlByCode(code)
+		if err != nil {
+			return "", err
+		}
+
+		if link != nil {
+			attempts++
+			if attempts >= 10 {
+				return "", fmt.Errorf("attempt limit exceeded")
+			}
+			continue
+		}
+
+		// Return code
+		return code, nil
+	}
+}
 
 func CreateShortUrl(ctx *gin.Context) {
 
@@ -20,25 +60,29 @@ func CreateShortUrl(ctx *gin.Context) {
 	}
 
 	// Validate if the provided URL is a valid URL format
-	// Generate a unique code for the URL
-	// Check if the generated code already exists in the database to avoid duplicates
 
-	code := "aaa"
+	// Generate the code
+	code, err := generateCode()
+	if err != nil {
+		fmt.Println(err)
+		sendInternalServerError(ctx)
+		return
+	}
 
+	// Try to insert into DB
 	link := model.Link{
-		Id:   0,
 		Url:  request.Url,
 		Code: code,
 	}
 
-	// Try to insert into DB
-	insertedLink, err := service.CreateShortUrl(link)
+	insertedLink, err := service.InsertShortUrl(link)
 	if err != nil {
 		fmt.Println(err)
-		sendMessage(ctx, http.StatusInternalServerError, "Something went wrong when communicating with the database")
+		sendInternalServerError(ctx)
 		return
 	}
 
-	sendData(ctx, http.StatusCreated, "The link shortcut has been created successfully", insertedLink)
+	// Send Success
+	sendData(ctx, http.StatusCreated, "The link shortcut has been created successfully", &insertedLink)
 
 }
